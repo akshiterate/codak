@@ -4,18 +4,18 @@
 #include <vector>
 int main(){
 	std::string fpath = "../family_frames/output_0001.ppm";
-	std::string opath = "output.ppm";
+	std::string opath = "image.shit";
 
 	std::ifstream file(fpath,std::ios::binary);
 	if(!file){ 
-		std::cerr<<"Oopsie Poopsie!! i cant read the file!!"<<std::endl;
+		std::cerr<<"Oops!! i cant read the file!!"<<std::endl;
 		return 1;
 	}
 
 	std::string magicNumber;
 	file>>magicNumber;
 	if(magicNumber != "P6"){
-		std::cerr<<"Oopsie Poopsie!! file format is gayyyyy"<<std::endl;
+		std::cerr<<"Oops!! file format does not match"<<std::endl;
 		return 1;
 	}
 	int w,h,v;
@@ -36,6 +36,23 @@ int main(){
 
 	}
 	
+	std::ofstream ofile(opath,std::ios::binary);
+	if(!ofile){
+		std::cerr<<"Oops! there is no output file here!!"<<std::endl;
+		return 1;
+	}
+	struct header{
+		int w;
+		int h;
+		int v;
+		long yuvSize;
+
+	};
+	header h1 = {w,h,v,yuv.size()*sizeof(float)};
+	ofile.write(reinterpret_cast<char*>(&h1),sizeof(h1));
+	ofile.write(reinterpret_cast<char*>(yuv.data()),yuv.size()*sizeof(float));
+	std::cout<<"File has been written yayayay"<<std::endl;
+
 	return 0;
 
 }
