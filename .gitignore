@@ -37,6 +37,7 @@
 # Executables
 *.exe
 *.out
+a.out
 *.app
 
 # Build directories
